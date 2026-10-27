@@ -1,152 +1,197 @@
 import { useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
+import { supabase } from '@/integrations/supabase/client'
+import { site, track, whatsappLink } from '@/lib/site'
+
+const empty = { name: '', email: '', phone: '', service: '', message: '', company: '' }
 
 export function Contact() {
   const { toast } = useToast()
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' })
+  const [form, setForm] = useState(empty)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [startedTracked, setStartedTracked] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
-      toast({ title: 'Please fill in all fields', variant: 'destructive' })
-      return
+  const set = (k: keyof typeof empty) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+    setForm((p) => ({ ...p, [k]: e.target.value }))
+
+  const onStart = () => {
+    if (!startedTracked) {
+      setStartedTracked(true)
+      track('contact_form_started')
     }
-    setIsSubmitting(true)
-    // Simulate submission — connect to a backend to actually send
-    setTimeout(() => {
-      toast({ title: 'Message sent!', description: "We'll get back to you soon." })
-      setFormData({ name: '', email: '', message: '' })
-      setIsSubmitting(false)
-    }, 1000)
   }
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    // Honeypot: bots that fill the hidden field get a fake success.
+    if (form.company) {
+      toast({ title: 'Message sent!' })
+      setForm(empty)
+      return
+    }
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+      toast({ title: 'Please fill in name, email and message', variant: 'destructive' })
+      return
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      toast({ title: 'That email address looks incomplete', variant: 'destructive' })
+      return
+    }
+
+    setIsSubmitting(true)
+    const { error } = await supabase.functions.invoke('submit-enquiry', {
+      body: {
+        name: form.name.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim() || null,
+        service: form.service || null,
+        message: form.message.trim(),
+      },
+    })
+    setIsSubmitting(false)
+
+    if (error) {
+      console.error('Enquiry failed:', error)
+      toast({
+        title: 'Something went wrong',
+        description: 'Your message could not be sent. Please try again in a moment.',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    track('contact_form_submitted', { service: form.service || 'unspecified' })
+    toast({ title: 'Thank you!', description: 'Your enquiry is with the RG Creations team — we will get back to you soon.' })
+    setForm(empty)
+    setStartedTracked(false)
+  }
+
+  const wa = whatsappLink()
+
   return (
-    <section id="contact" className="relative py-32 bg-card/30">
-      <div className="container mx-auto px-6 sm:px-8 lg:px-12">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-3 mb-6">
-            <div className="w-3 h-3 bg-accent-emerald rounded-full animate-pulse" />
-            <span className="text-sm font-semibold text-muted-foreground">
-              Let's Create Together
-            </span>
-            <div className="w-3 h-3 bg-accent-blue rounded-full animate-pulse" />
-          </div>
-          
-          <h2 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight mb-8">
-            <span className="block mb-2">Ready to Light Up the Screen?</span>
+    <section id="contact" className="bg-ink text-paper py-24 sm:py-32">
+      <div className="px-6 sm:px-10 lg:px-16 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+        <div>
+          <p className="font-body text-ember-soft uppercase tracking-[0.3em] text-xs mb-4">Let's create together</p>
+          <h2 className="font-display font-light text-4xl sm:text-6xl leading-tight">
+            Ready to light up <span className="italic text-ember-soft">the screen?</span>
           </h2>
-          
-          <p className="text-2xl lg:text-3xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-            Tell us about your project and we'll get back to you with a plan to bring your vision to cinematic reality
+          <p className="font-body text-paper/70 text-lg mt-6 leading-relaxed max-w-md">
+            Tell us about your project and the RG Creations team will come back with a plan to bring it to life.
           </p>
+
+          {wa && (
+            <a
+              href={wa}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track('whatsapp_clicked')}
+              className="inline-flex items-center gap-3 mt-8 border border-paper/30 rounded-sm px-6 py-4 hover:bg-paper/10 gentle-animation"
+            >
+              <svg aria-hidden="true" viewBox="0 0 24 24" className="w-6 h-6 fill-current"><path d="M12.04 2a9.9 9.9 0 0 0-8.4 15.2L2 22l4.9-1.6A9.9 9.9 0 1 0 12.04 2Zm5.8 14.1c-.2.7-1.2 1.3-1.9 1.4-.5.1-1.2.2-3.4-.7-2.9-1.2-4.8-4-5-4.2-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.2-.3.5-.4.7-.4h.5c.2 0 .4 0 .6.4l.9 2.1c0 .2.1.3 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.4.1.1.1.8-.1 1.5Z"/></svg>
+              <span className="font-body font-medium">Chat on WhatsApp{site.whatsappDisplay ? ` · ${site.whatsappDisplay}` : ''}</span>
+            </a>
+          )}
+
+          {site.email && (
+            <p className="font-body text-paper/70 mt-6">
+              Prefer email? Write to <a className="text-ember-soft underline" href={`mailto:${site.email}`} onClick={() => track('email_link_clicked')}>{site.email}</a>
+            </p>
+          )}
         </div>
 
-        {/* Contact Form */}
-        <div className="max-w-3xl mx-auto">
-          <div className="bg-background clean-border rounded-3xl overflow-hidden elevated-shadow">
-            <div className="bg-card/50 px-8 py-6 border-b border-border">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-xl font-black text-foreground mb-1">
-                    Get In Touch
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Fill out the form and we'll respond within 24 hours
-                  </p>
-                </div>
-                <div className="hidden sm:flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-accent-emerald rounded-full" />
-                  <span className="text-sm text-muted-foreground font-medium">Available now</span>
-                </div>
-              </div>
+        <form
+          onSubmit={handleSubmit}
+          onFocus={onStart}
+          className="bg-paper text-ink rounded-sm p-8 sm:p-10 space-y-6"
+          noValidate
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <label htmlFor="name" className="block font-body text-sm font-semibold mb-2">Name *</label>
+              <input
+                id="name"
+                type="text"
+                required
+                maxLength={100}
+                value={form.name}
+                onChange={set('name')}
+                className="w-full px-4 py-3 rounded-sm bg-input-background border border-border text-ink focus:outline-none focus:ring-2 focus:ring-ember/60"
+                placeholder="Your name"
+              />
             </div>
-            
-            <form onSubmit={handleSubmit} className="p-8 space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-semibold text-foreground mb-2">Name</label>
-                  <input
-                    id="name"
-                    type="text"
-                    maxLength={100}
-                    value={formData.name}
-                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                    className="w-full px-4 py-3 rounded-xl bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent-blue/50 transition-all"
-                    placeholder="Your name"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-semibold text-foreground mb-2">Email</label>
-                  <input
-                    id="email"
-                    type="email"
-                    maxLength={255}
-                    value={formData.email}
-                    onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                    className="w-full px-4 py-3 rounded-xl bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent-blue/50 transition-all"
-                    placeholder="your@email.com"
-                  />
-                </div>
-              </div>
-              <div>
-                <label htmlFor="message" className="block text-sm font-semibold text-foreground mb-2">Message</label>
-                <textarea
-                  id="message"
-                  rows={5}
-                  maxLength={1000}
-                  value={formData.message}
-                  onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
-                  className="w-full px-4 py-3 rounded-xl bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent-blue/50 transition-all resize-none"
-                  placeholder="Tell us about your project..."
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full py-4 rounded-xl bg-foreground text-background font-black text-lg hover:opacity-90 transition-opacity disabled:opacity-50"
+            <div>
+              <label htmlFor="email" className="block font-body text-sm font-semibold mb-2">Email *</label>
+              <input
+                id="email"
+                type="email"
+                required
+                maxLength={255}
+                value={form.email}
+                onChange={set('email')}
+                className="w-full px-4 py-3 rounded-sm bg-input-background border border-border text-ink focus:outline-none focus:ring-2 focus:ring-ember/60"
+                placeholder="you@example.com"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <label htmlFor="phone" className="block font-body text-sm font-semibold mb-2">Phone / WhatsApp</label>
+              <input
+                id="phone"
+                type="tel"
+                maxLength={20}
+                value={form.phone}
+                onChange={set('phone')}
+                className="w-full px-4 py-3 rounded-sm bg-input-background border border-border text-ink focus:outline-none focus:ring-2 focus:ring-ember/60"
+                placeholder="Optional"
+              />
+            </div>
+            <div>
+              <label htmlFor="service" className="block font-body text-sm font-semibold mb-2">Service</label>
+              <select
+                id="service"
+                value={form.service}
+                onChange={set('service')}
+                className="w-full px-4 py-3 rounded-sm bg-input-background border border-border text-ink focus:outline-none focus:ring-2 focus:ring-ember/60"
               >
-                {isSubmitting ? 'Sending...' : 'Send Message'}
-              </button>
-            </form>
+                <option value="">Not sure yet</option>
+                {site.services.map((s) => (
+                  <option key={s.id} value={s.id}>{s.name}</option>
+                ))}
+              </select>
+            </div>
           </div>
-        </div>
 
-        {/* Bottom Info */}
-        <div className="text-center mt-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="bg-background clean-border rounded-2xl p-6 subtle-shadow">
-              <div className="w-12 h-12 bg-accent-blue/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <div className="w-6 h-6 bg-accent-blue rounded-full" />
-              </div>
-              <h4 className="font-black text-foreground mb-2">Project Discussion</h4>
-              <p className="text-muted-foreground text-sm">
-                Share your vision and requirements with our team
-              </p>
-            </div>
-            
-            <div className="bg-background clean-border rounded-2xl p-6 subtle-shadow">
-              <div className="w-12 h-12 bg-accent-emerald/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <div className="w-6 h-6 bg-accent-emerald rounded-full" />
-              </div>
-              <h4 className="font-black text-foreground mb-2">Custom Strategy</h4>
-              <p className="text-muted-foreground text-sm">
-                Get a tailored approach for your unique project
-              </p>
-            </div>
-            
-            <div className="bg-background clean-border rounded-2xl p-6 subtle-shadow">
-              <div className="w-12 h-12 bg-accent-purple/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <div className="w-6 h-6 bg-accent-purple rounded-full" />
-              </div>
-              <h4 className="font-black text-foreground mb-2">Next Steps</h4>
-              <p className="text-muted-foreground text-sm">
-                Clear timeline and roadmap to bring your idea to life
-              </p>
-            </div>
+          {/* Honeypot — hidden from humans, catches bots */}
+          <div className="absolute -left-[9999px]" aria-hidden="true">
+            <label htmlFor="company">Company</label>
+            <input id="company" type="text" tabIndex={-1} autoComplete="off" value={form.company} onChange={set('company')} />
           </div>
-        </div>
+
+          <div>
+            <label htmlFor="message" className="block font-body text-sm font-semibold mb-2">Tell us about your project *</label>
+            <textarea
+              id="message"
+              required
+              maxLength={2000}
+              rows={5}
+              value={form.message}
+              onChange={set('message')}
+              className="w-full px-4 py-3 rounded-sm bg-input-background border border-border text-ink focus:outline-none focus:ring-2 focus:ring-ember/60 resize-y"
+              placeholder="The occasion, the audience, the dates you have in mind…"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full bg-ember text-paper font-semibold px-6 py-4 rounded-sm hover:bg-ember-soft gentle-animation disabled:opacity-60 cursor-pointer"
+          >
+            {isSubmitting ? 'Sending…' : 'Send enquiry'}
+          </button>
+        </form>
       </div>
     </section>
   )
