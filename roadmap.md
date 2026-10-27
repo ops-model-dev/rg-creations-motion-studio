@@ -8,6 +8,8 @@ Rebuild the MOJJU template into the RG Creations site per the client brief.
 - [ ] Enable Lovable Cloud (backing for enquiry storage)
 - [ ] Build editorial site structure: Home (hero, services, featured work, process, contact CTAs), Services sections for the four lines, Portfolio, About/Process, Contact
 - [ ] Enquiry form: validated, stored server-side, spam prevention, clear success state (AC-04, AC-05)
+- [x] Business owner supplied the official logo (dark + light versions)
+- [ ] Upload logo to CDN assets and create favicon
 - [ ] WhatsApp CTA wired to the client's number (number needed from user)
 - [ ] Analytics events: form started/submitted, WhatsApp/phone/email clicks, service view, portfolio open
 - [ ] SEO: title, description, OG tags, sitemap
