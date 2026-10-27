@@ -7,10 +7,10 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: 'calc(var(--spacing) * 4)', // 1rem with 14px base = 14px padding
+      padding: 'calc(var(--spacing) * 4)',
       screens: {
         sm: '40rem',
-        md: '48rem', 
+        md: '48rem',
         lg: '64rem',
         xl: '80rem',
         '2xl': '96rem',
@@ -18,7 +18,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        bagel: ['Bagel Fat One', 'cursive'],
+        display: ['Fraunces', 'Georgia', 'serif'],
+        body: ['"Work Sans"', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: "var(--border)",
@@ -57,6 +58,10 @@ export default {
           DEFAULT: "var(--card)",
           foreground: "var(--card-foreground)",
         },
+        ink: "var(--ink)",
+        paper: "var(--paper)",
+        ember: "var(--ember)",
+        emberSoft: "var(--ember-soft)",
       },
       borderRadius: {
         lg: "var(--radius)",
