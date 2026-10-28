@@ -84,7 +84,7 @@ export function Hero() {
                 <a
                   key={l.href}
                   href={l.href}
-                  className="font-body text-paper/90 hover:text-paper text-sm font-medium tracking-wide uppercase gentle-animation"
+                  className="font-body text-paper text-sm font-semibold tracking-wide uppercase gentle-animation hover:text-ember-soft"
                 >
                   {l.label}
                 </a>

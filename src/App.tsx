@@ -4,6 +4,7 @@ import { Showcase } from './components/Showcase'
 import { Process } from './components/Process'
 import { Contact } from './components/Contact'
 import { Footer } from './components/Footer'
+import { Toaster } from './components/ui/toaster'
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
+      <Toaster />
     </div>
   )
 }
