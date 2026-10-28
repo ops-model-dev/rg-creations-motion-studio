@@ -1,6 +1,6 @@
 import { Hero } from './components/Hero'
 import { Services } from './components/Services'
-import { Showcase } from './components/Showcase'
+import { Reels } from './components/Reels'
 import { Process } from './components/Process'
 import { Contact } from './components/Contact'
 import { Footer } from './components/Footer'
@@ -12,7 +12,7 @@ export default function App() {
       <main role="main">
         <Hero />
         <Services />
-        <Showcase />
+        <Reels />
         <Process />
         <Contact />
       </main>

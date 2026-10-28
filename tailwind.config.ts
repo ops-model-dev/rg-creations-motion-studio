@@ -18,8 +18,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['Fraunces', 'Georgia', 'serif'],
-        body: ['"Work Sans"', 'system-ui', 'sans-serif'],
+        display: ['Anton', 'Archivo', 'sans-serif'],
+        body: ['Archivo', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: "var(--border)",
@@ -46,9 +46,6 @@ export default {
         accent: {
           DEFAULT: "var(--accent)",
           foreground: "var(--accent-foreground)",
-          blue: "var(--accent-blue)",
-          emerald: "var(--accent-emerald)",
-          purple: "var(--accent-purple)",
         },
         popover: {
           DEFAULT: "var(--popover)",
@@ -58,37 +55,25 @@ export default {
           DEFAULT: "var(--card)",
           foreground: "var(--card-foreground)",
         },
-        ink: "var(--ink)",
-        paper: "var(--paper)",
-        ember: "var(--ember)",
-        emberSoft: "var(--ember-soft)",
+        black: "var(--black)",
+        charcoal: "var(--charcoal)",
+        ivory: "var(--ivory)",
+        gold: "var(--gold)",
+        "gold-soft": "var(--gold-soft)",
       },
       borderRadius: {
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        md: "var(--radius)",
+        sm: "var(--radius)",
       },
       keyframes: {
-        "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
-        },
-        "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+        reveal: {
+          from: { opacity: '0', transform: 'translateY(28px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
         },
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        reveal: 'reveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both',
       },
     },
   },

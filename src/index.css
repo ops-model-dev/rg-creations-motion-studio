@@ -1,60 +1,39 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Work+Sans:ital,wght@0,300..700;1,300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,300..700;1,300..700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
   --font-size: 16px;
-  --background: #F7F3EC;
-  --foreground: #171310;
-  --card: #FFFDF8;
-  --card-foreground: #171310;
-  --popover: #FFFDF8;
-  --popover-foreground: #171310;
-  --primary: #171310;
-  --primary-foreground: #F7F3EC;
-  --secondary: #ECE5D8;
-  --secondary-foreground: #171310;
-  --muted: #ECE5D8;
-  --muted-foreground: #6E6459;
-  --accent: #C4522A;
-  --accent-foreground: #FFFDF8;
+  /* Cinematic dark theme */
+  --background: #121110;
+  --foreground: #F2EFE9;
+  --card: #1A1815;
+  --card-foreground: #F2EFE9;
+  --popover: #1A1815;
+  --popover-foreground: #F2EFE9;
+  --primary: #F2EFE9;
+  --primary-foreground: #121110;
+  --secondary: #1A1815;
+  --secondary-foreground: #F2EFE9;
+  --muted: #1A1815;
+  --muted-foreground: #A39B90;
+  --accent: #C5A66A;
+  --accent-foreground: #121110;
   --destructive: #C0392B;
-  --destructive-foreground: #FFFDF8;
-  --border: #E3DACA;
-  --input: #ECE5D8;
-  --input-background: #FFFDF8;
-  --switch-background: #E3DACA;
-  --ring: #C4522A;
-  --radius: 0.25rem;
+  --destructive-foreground: #F2EFE9;
+  --border: #2A2723;
+  --input: #1A1815;
+  --input-background: #1A1815;
+  --ring: #C5A66A;
+  --radius: 0px;
 
-  /* Editorial brand tokens */
-  --paper: #F7F3EC;
-  --ink: #171310;
-  --ember: #C4522A;
-  --ember-soft: #E06A3C;
-}
-
-.dark {
-  --background: #171310;
-  --foreground: #F7F3EC;
-  --card: #201A15;
-  --card-foreground: #F7F3EC;
-  --popover: #201A15;
-  --popover-foreground: #F7F3EC;
-  --primary: #F7F3EC;
-  --primary-foreground: #171310;
-  --secondary: #2A231C;
-  --secondary-foreground: #F7F3EC;
-  --muted: #2A231C;
-  --muted-foreground: #A89C8D;
-  --accent: #E06A3C;
-  --accent-foreground: #171310;
-  --destructive: #E06A3C;
-  --destructive-foreground: #171310;
-  --border: #2C251E;
-  --input: #2A231C;
-  --ring: #E06A3C;
+  /* Editorial tokens */
+  --black: #121110;
+  --charcoal: #1A1815;
+  --ivory: #F2EFE9;
+  --gold: #C5A66A;
+  --gold-soft: #DCC391;
 }
 
 @theme inline {
@@ -78,13 +57,11 @@
   --color-input: var(--input);
   --color-input-background: var(--input-background);
   --color-ring: var(--ring);
-  --color-paper: var(--paper);
-  --color-ink: var(--ink);
-  --color-ember: var(--ember);
-  --color-ember-soft: var(--ember-soft);
-  --radius-sm: calc(var(--radius) - 2px);
-  --radius-md: var(--radius);
-  --radius-lg: calc(var(--radius) + 4px);
+  --color-black: var(--black);
+  --color-charcoal: var(--charcoal);
+  --color-ivory: var(--ivory);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
 }
 
 @layer base {
@@ -94,7 +71,7 @@
 
   body {
     @apply bg-background text-foreground overflow-x-hidden;
-    font-family: 'Work Sans', system-ui, sans-serif;
+    font-family: 'Archivo', system-ui, sans-serif;
     width: 100%;
     max-width: 100vw;
   }
@@ -102,29 +79,21 @@
   * {
     box-sizing: border-box;
   }
-
-  h1, h2, h3 {
-    font-family: 'Fraunces', Georgia, serif;
-  }
 }
 
 @layer utilities {
   .font-display {
-    font-family: 'Fraunces', Georgia, serif;
+    font-family: 'Anton', 'Archivo', sans-serif;
+    letter-spacing: 0.01em;
   }
   .font-body {
-    font-family: 'Work Sans', system-ui, sans-serif;
+    font-family: 'Archivo', system-ui, sans-serif;
   }
   .gentle-animation {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .glass-effect {
-    background: rgba(23, 19, 16, 0.55);
-    backdrop-filter: blur(14px) saturate(1.3);
-    border: 1px solid rgba(247, 243, 236, 0.14);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .text-shadow-hero {
-    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55);
+    text-shadow: 0 2px 28px rgba(0, 0, 0, 0.65);
   }
 }
 
@@ -149,5 +118,5 @@ html {
 }
 ::-webkit-scrollbar-thumb {
   background: var(--border);
-  border-radius: 4px;
+  border-radius: 0;
 }
