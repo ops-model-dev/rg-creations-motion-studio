@@ -5,6 +5,10 @@ import { site, track, whatsappLink } from '@/lib/site'
 
 const empty = { name: '', email: '', phone: '', service: '', message: '', company: '' }
 
+const inputClass =
+  'w-full px-4 py-3 bg-input-background border border-border text-ivory placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-gold/60 focus:border-gold/60 gentle-animation'
+const labelClass = 'block font-body text-sm font-semibold mb-2 text-ivory'
+
 export function Contact() {
   const { toast } = useToast()
   const [form, setForm] = useState(empty)
@@ -69,46 +73,62 @@ export function Contact() {
   const wa = whatsappLink()
 
   return (
-    <section id="contact" className="bg-ink text-paper py-24 sm:py-32">
-      <div className="px-6 sm:px-10 lg:px-16 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-        <div>
-          <p className="font-body text-ember-soft uppercase tracking-[0.3em] text-xs mb-4">Let's create together</p>
-          <h2 className="font-display font-light text-4xl sm:text-6xl leading-tight">
-            Ready to light up <span className="italic text-ember-soft">the screen?</span>
+    <section id="contact" className="bg-black text-ivory py-24 sm:py-36">
+      <div className="px-6 sm:px-10 lg:px-16 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="lg:col-span-5"
+        >
+          <p className="font-body text-gold uppercase tracking-[0.35em] text-xs mb-4">Let's create together</p>
+          <h2 className="font-display uppercase leading-[0.95] text-5xl sm:text-7xl">
+            Ready to light up
+            <span className="block text-gold">the screen?</span>
           </h2>
-          <p className="font-body text-paper/70 text-lg mt-6 leading-relaxed max-w-md">
+          <p className="font-body text-muted-foreground text-lg mt-7 leading-relaxed max-w-md">
             Tell us about your project and the RG Creations team will come back with a plan to bring it to life.
           </p>
 
-          {wa && (
-            <a
-              href={wa}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => track('whatsapp_clicked')}
-              className="inline-flex items-center gap-3 mt-8 border border-paper/30 rounded-sm px-6 py-4 hover:bg-paper/10 gentle-animation"
-            >
-              <svg aria-hidden="true" viewBox="0 0 24 24" className="w-6 h-6 fill-current"><path d="M12.04 2a9.9 9.9 0 0 0-8.4 15.2L2 22l4.9-1.6A9.9 9.9 0 1 0 12.04 2Zm5.8 14.1c-.2.7-1.2 1.3-1.9 1.4-.5.1-1.2.2-3.4-.7-2.9-1.2-4.8-4-5-4.2-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.2-.3.5-.4.7-.4h.5c.2 0 .4 0 .6.4l.9 2.1c0 .2.1.3 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.4.1.1.1.8-.1 1.5Z"/></svg>
-              <span className="font-body font-medium">Chat on WhatsApp{site.whatsappDisplay ? ` · ${site.whatsappDisplay}` : ''}</span>
-            </a>
-          )}
+          <div className="mt-8 space-y-4">
+            {wa && (
+              <a
+                href={wa}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => track('whatsapp_clicked')}
+                className="inline-flex items-center gap-3 border border-ivory/50 px-6 py-4 hover:border-gold hover:text-gold text-ivory gentle-animation"
+              >
+                <svg aria-hidden="true" viewBox="0 0 24 24" className="w-6 h-6 fill-current"><path d="M12.04 2a9.9 9.9 0 0 0-8.4 15.2L2 22l4.9-1.6A9.9 9.9 0 1 0 12.04 2Zm5.8 14.1c-.2.7-1.2 1.3-1.9 1.4-.5.1-1.2.2-3.4-.7-2.9-1.2-4.8-4-5-4.2-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.2-.3.5-.4.7-.4h.5c.2 0 .4 0 .6.4l.9 2.1c0 .2.1.3 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.4.1.1.1.8-.1 1.5Z"/></svg>
+                <span className="font-body font-medium">Chat on WhatsApp{site.whatsappDisplay ? ` · ${site.whatsappDisplay}` : ''}</span>
+              </a>
+            )}
 
-          {site.email && (
-            <p className="font-body text-paper/70 mt-6">
-              Prefer email? Write to <a className="text-ember-soft underline" href={`mailto:${site.email}`} onClick={() => track('email_link_clicked')}>{site.email}</a>
-            </p>
-          )}
-        </div>
+            {site.email && (
+              <p className="font-body text-muted-foreground">
+                Prefer email? Write to{' '}
+                <a className="text-gold underline hover:text-gold-soft gentle-animation" href={`mailto:${site.email}`} onClick={() => track('email_link_clicked')}>
+                  {site.email}
+                </a>
+              </p>
+            )}
+          </div>
+        </motion.div>
 
-        <form
+        <motion.form
           onSubmit={handleSubmit}
           onFocus={onStart}
-          className="bg-paper text-ink rounded-sm p-8 sm:p-10 space-y-6"
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          className="lg:col-span-7 bg-charcoal border border-gold/20 p-8 sm:p-10 space-y-6"
           noValidate
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="name" className="block font-body text-sm font-semibold mb-2">Name *</label>
+              <label htmlFor="name" className={labelClass}>Name *</label>
               <input
                 id="name"
                 type="text"
@@ -116,12 +136,12 @@ export function Contact() {
                 maxLength={100}
                 value={form.name}
                 onChange={set('name')}
-                className="w-full px-4 py-3 rounded-sm bg-input-background border border-border text-ink focus:outline-none focus:ring-2 focus:ring-ember/60"
+                className={inputClass}
                 placeholder="Your name"
               />
             </div>
             <div>
-              <label htmlFor="email" className="block font-body text-sm font-semibold mb-2">Email *</label>
+              <label htmlFor="email" className={labelClass}>Email *</label>
               <input
                 id="email"
                 type="email"
@@ -129,7 +149,7 @@ export function Contact() {
                 maxLength={255}
                 value={form.email}
                 onChange={set('email')}
-                className="w-full px-4 py-3 rounded-sm bg-input-background border border-border text-ink focus:outline-none focus:ring-2 focus:ring-ember/60"
+                className={inputClass}
                 placeholder="you@example.com"
               />
             </div>
@@ -137,24 +157,24 @@ export function Contact() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="phone" className="block font-body text-sm font-semibold mb-2">Phone / WhatsApp</label>
+              <label htmlFor="phone" className={labelClass}>Phone / WhatsApp</label>
               <input
                 id="phone"
                 type="tel"
                 maxLength={20}
                 value={form.phone}
                 onChange={set('phone')}
-                className="w-full px-4 py-3 rounded-sm bg-input-background border border-border text-ink focus:outline-none focus:ring-2 focus:ring-ember/60"
+                className={inputClass}
                 placeholder="Optional"
               />
             </div>
             <div>
-              <label htmlFor="service" className="block font-body text-sm font-semibold mb-2">Service</label>
+              <label htmlFor="service" className={labelClass}>Service</label>
               <select
                 id="service"
                 value={form.service}
                 onChange={set('service')}
-                className="w-full px-4 py-3 rounded-sm bg-input-background border border-border text-ink focus:outline-none focus:ring-2 focus:ring-ember/60"
+                className={inputClass}
               >
                 <option value="">Not sure yet</option>
                 {site.services.map((s) => (
@@ -171,7 +191,7 @@ export function Contact() {
           </div>
 
           <div>
-            <label htmlFor="message" className="block font-body text-sm font-semibold mb-2">Tell us about your project *</label>
+            <label htmlFor="message" className={labelClass}>Tell us about your project *</label>
             <textarea
               id="message"
               required
@@ -179,7 +199,7 @@ export function Contact() {
               rows={5}
               value={form.message}
               onChange={set('message')}
-              className="w-full px-4 py-3 rounded-sm bg-input-background border border-border text-ink focus:outline-none focus:ring-2 focus:ring-ember/60 resize-y"
+              className={`${inputClass} resize-y`}
               placeholder="The occasion, the audience, the dates you have in mind…"
             />
           </div>
@@ -187,11 +207,11 @@ export function Contact() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-ember text-paper font-semibold px-6 py-4 rounded-sm hover:bg-ember-soft gentle-animation disabled:opacity-60 cursor-pointer"
+            className="w-full bg-gold text-black font-semibold px-6 py-4 hover:bg-gold-soft gentle-animation disabled:opacity-60 cursor-pointer"
           >
             {isSubmitting ? 'Sending…' : 'Send enquiry'}
           </button>
-        </form>
+        </motion.form>
       </div>
     </section>
   )
