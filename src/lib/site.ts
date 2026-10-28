@@ -2,6 +2,8 @@ export const site = {
   name: 'RG Creations',
   tagline: 'Brewing Talents',
   headline: ['Big ideas.', 'Unforgettable', 'moments.'],
+  instagramUrl: 'https://www.instagram.com/rgcreationsmy',
+  instagramHandle: '@rgcreationsmy',
   // Real contact details pending from the business owner — buttons render only when set.
   whatsappNumber: '', // digits only with country code, e.g. 9198xxxxxxx
   whatsappDisplay: '',
