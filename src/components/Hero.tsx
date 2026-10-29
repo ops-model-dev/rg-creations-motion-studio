@@ -45,12 +45,24 @@ export function Hero() {
       {/* Background video */}
       {!videoFailed && (
         <video
+          ref={(el) => {
+            if (el) {
+              el.muted = true
+              el.play().catch(() => {
+                // Browsers may defer autoplay until interaction; don't fail
+              })
+            }
+          }}
           className="absolute inset-0 h-full w-full object-cover"
           autoPlay
           muted
           loop
           playsInline
-          onError={() => setVideoFailed(true)}
+          preload="auto"
+          onError={(e) => {
+            console.error('Hero background video error:', e)
+            setVideoFailed(true)
+          }}
         >
           <source src={heroReel.url} type="video/mp4" />
         </video>
@@ -100,9 +112,9 @@ export function Hero() {
             </div>
 
             <button
-              className="md:hidden text-ivory p-2"
-              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden text-ivory hover:text-gold p-2"
+              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -110,67 +122,71 @@ export function Hero() {
         </div>
       </motion.nav>
 
-      {/* Mobile menu */}
+      {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-40 bg-black/95 backdrop-blur-md pt-28 px-8">
-          <div className="flex flex-col gap-6">
-            {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                onClick={() => setIsMenuOpen(false)}
-                className="font-display text-4xl text-ivory uppercase border-b border-gold/25 pb-4"
-              >
-                {l.label}
-              </a>
-            ))}
-            <button
-              onClick={goContact}
-              className="bg-gold text-black font-semibold px-6 py-4 mt-2 cursor-pointer"
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-40 bg-black/95 flex flex-col justify-center items-center gap-8 md:hidden px-6"
+        >
+          {links.map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              onClick={() => setIsMenuOpen(false)}
+              className="font-display text-4xl uppercase tracking-wider text-ivory hover:text-gold gentle-animation"
             >
-              Start a project
-            </button>
-          </div>
-        </div>
+              {l.label}
+            </a>
+          ))}
+          <button
+            onClick={goContact}
+            className="mt-4 bg-gold text-black font-body font-semibold text-base uppercase tracking-[0.18em] px-8 py-4 hover:bg-gold-soft gentle-animation"
+          >
+            Start a project
+          </button>
+        </motion.div>
       )}
 
-      {/* Headline */}
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 0.35 }}
-        className="relative z-10 flex min-h-screen items-end px-6 sm:px-10 lg:px-16 pb-16 sm:pb-24"
-      >
-        <div className="max-w-5xl">
-          <p className="font-body text-gold uppercase tracking-[0.35em] text-xs sm:text-sm mb-5">
-            Events · Production · Talent · Promotion
+      {/* Hero Content */}
+      <div className="relative z-10 min-h-screen flex flex-col justify-end pb-20 sm:pb-28 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 36 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-4xl"
+        >
+          <p className="font-body text-gold uppercase tracking-[0.35em] text-xs sm:text-sm font-semibold mb-4 sm:mb-6">
+            Motion Studio &bull; Kuala Lumpur
           </p>
-          <h1 className="font-display uppercase text-ivory text-shadow-hero leading-[0.95] text-5xl sm:text-7xl lg:text-8xl">
-            Big ideas.
-            <span className="block text-gold">Unforgettable</span>
-            <span className="block">Moments.</span>
-          </h1>
-          <p className="font-body text-ivory text-base sm:text-lg mt-6 max-w-xl leading-relaxed">
-            From the first idea to the final spotlight, RG Creations brings people, production and
-            promotion together to make every experience count.
-          </p>
-          <div className="flex flex-wrap gap-4 mt-7">
 
+          <h1 className="font-display uppercase text-ivory leading-[0.9] text-5xl sm:text-7xl md:text-8xl tracking-tight mb-6 sm:mb-8">
+            Brewing
+            <span className="block text-gold">Talents</span>
+            <span className="block">Igniting Stages</span>
+          </h1>
+
+          <p className="font-body text-ivory/85 text-base sm:text-xl font-normal max-w-2xl mb-8 sm:mb-10 leading-relaxed">
+            From concert lighting and visual stages to high-energy editorial video and talent curation &mdash; we produce unforgettable live experiences.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
             <button
               onClick={goContact}
-              className="bg-gold text-black font-semibold px-8 py-4 hover:bg-gold-soft gentle-animation cursor-pointer"
+              className="bg-gold text-black font-body font-semibold text-sm uppercase tracking-[0.2em] px-8 py-4 hover:bg-gold-soft gentle-animation cursor-pointer text-center"
             >
               Start a project
             </button>
             <a
               href="#reels"
-              className="border border-ivory text-ivory px-8 py-4 hover:border-gold hover:text-gold gentle-animation"
+              className="border border-ivory/40 text-ivory font-body font-medium text-sm uppercase tracking-[0.2em] px-8 py-4 hover:border-gold hover:text-gold gentle-animation text-center"
             >
-              Watch the reels
+              Watch reels
             </a>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   )
 }

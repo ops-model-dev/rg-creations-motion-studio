@@ -16,12 +16,10 @@ const tiles = [
   { kind: 'video' as const, src: heroReel.url, poster: reel1.url, label: 'Full-house show' },
   { kind: 'video' as const, src: stageReel.url, poster: reel3.url, label: 'On stage' },
   { kind: 'video' as const, src: reel4.url, poster: reel4Poster.url, label: 'Crowd energy' },
-  { kind: 'image' as const, src: reel2.url, label: 'In the moment' },
   { kind: 'video' as const, src: reel5.url, poster: reel5Poster.url, label: 'Stage lights' },
-  { kind: 'image' as const, src: reel3.url, label: 'Spotlight' },
+  { kind: 'video' as const, src: stageReel.url, poster: reel2.url, label: 'In the moment' },
   { kind: 'video' as const, src: reel6.url, poster: reel6Poster.url, label: 'Live from the floor' },
 ]
-
 
 function InstagramGlyph({ className = 'w-5 h-5' }: { className?: string }) {
   return (
@@ -65,7 +63,7 @@ export function Reels() {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
           {tiles.map((t, i) => (
             <motion.a
               key={i}
@@ -77,13 +75,18 @@ export function Reels() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.65, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-              className={`group relative block overflow-hidden bg-charcoal aspect-[9/16] ${
-                i % 2 === 1 ? 'lg:translate-y-8' : ''
-              }`}
+              className={`group relative block overflow-hidden bg-charcoal aspect-[9/16] ${i % 2 === 1 ? 'md:translate-y-4' : ''
+                }`}
               aria-label={`${t.label} — watch on Instagram`}
             >
               {t.kind === 'video' ? (
                 <video
+                  ref={(el) => {
+                    if (el) {
+                      el.muted = true
+                      el.play().catch(() => { })
+                    }
+                  }}
                   className="absolute inset-0 h-full w-full object-cover group-hover:scale-[1.04] gentle-animation"
                   muted
                   loop
