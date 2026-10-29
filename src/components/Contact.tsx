@@ -4,7 +4,9 @@ import { useToast } from '@/hooks/use-toast'
 import { supabase } from '@/integrations/supabase/client'
 import { site, track, whatsappLink } from '@/lib/site'
 
+// RG Creations enquiry form — sends to the submit-enquiry function.
 const empty = { name: '', email: '', phone: '', service: '', message: '', company: '' }
+
 
 const inputClass =
   'w-full px-4 py-3 bg-input-background border border-border text-ivory placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-gold/60 focus:border-gold/60 gentle-animation'
