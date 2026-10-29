@@ -4,14 +4,24 @@ import stageReel from '@/assets/stage-reel.mp4.asset.json'
 import reel1 from '@/assets/reel-1.jpg.asset.json'
 import reel2 from '@/assets/reel-2.jpg.asset.json'
 import reel3 from '@/assets/reel-3.jpg.asset.json'
+import reel4 from '@/assets/reel-4.mp4.asset.json'
+import reel4Poster from '@/assets/reel-4.jpg.asset.json'
+import reel5 from '@/assets/reel-5.mp4.asset.json'
+import reel5Poster from '@/assets/reel-5.jpg.asset.json'
+import reel6 from '@/assets/reel-6.mp4.asset.json'
+import reel6Poster from '@/assets/reel-6.jpg.asset.json'
 import { site, track } from '@/lib/site'
 
 const tiles = [
   { kind: 'video' as const, src: heroReel.url, poster: reel1.url, label: 'Full-house show' },
   { kind: 'video' as const, src: stageReel.url, poster: reel3.url, label: 'On stage' },
-  { kind: 'image' as const, src: reel2.url, label: 'Crowd energy' },
+  { kind: 'video' as const, src: reel4.url, poster: reel4Poster.url, label: 'Crowd energy' },
+  { kind: 'image' as const, src: reel2.url, label: 'In the moment' },
+  { kind: 'video' as const, src: reel5.url, poster: reel5Poster.url, label: 'Stage lights' },
   { kind: 'image' as const, src: reel3.url, label: 'Spotlight' },
+  { kind: 'video' as const, src: reel6.url, poster: reel6Poster.url, label: 'Live from the floor' },
 ]
+
 
 function InstagramGlyph({ className = 'w-5 h-5' }: { className?: string }) {
   return (
