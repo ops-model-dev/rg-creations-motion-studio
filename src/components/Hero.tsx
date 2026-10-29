@@ -145,16 +145,17 @@ export function Hero() {
           <p className="font-body text-gold uppercase tracking-[0.35em] text-xs sm:text-sm mb-5">
             Events · Production · Talent · Promotion
           </p>
-          <h1 className="font-display uppercase text-ivory text-shadow-hero leading-[0.95] text-6xl sm:text-8xl lg:text-9xl">
+          <h1 className="font-display uppercase text-ivory text-shadow-hero leading-[0.95] text-5xl sm:text-7xl lg:text-8xl">
             Big ideas.
             <span className="block text-gold">Unforgettable</span>
             <span className="block">Moments.</span>
           </h1>
-          <p className="font-body text-ivory text-lg sm:text-xl mt-7 max-w-xl leading-relaxed">
+          <p className="font-body text-ivory text-base sm:text-lg mt-6 max-w-xl leading-relaxed">
             From the first idea to the final spotlight, RG Creations brings people, production and
             promotion together to make every experience count.
           </p>
-          <div className="flex flex-wrap gap-4 mt-9">
+          <div className="flex flex-wrap gap-4 mt-7">
+
             <button
               onClick={goContact}
               className="bg-gold text-black font-semibold px-8 py-4 hover:bg-gold-soft gentle-animation cursor-pointer"
